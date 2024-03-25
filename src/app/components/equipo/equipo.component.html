@@ -30,7 +30,7 @@
   </div>
 </div>
 
-<h2>Jugadores {{ busqueda }}</h2>
+<h2>Jugadores</h2>
 
 <div class="grid" *ngIf="jugadores.length > 0; else noData">
   <div class="col-2">
@@ -93,6 +93,10 @@
 
 <ng-template #noData>
   <div class="mat-elevation-z8 p-3 pt-4 text-center text-primary">
-    <h2>No hay registros disponibles</h2>
+    <ng-container *ngIf="isLoading">
+      <mat-spinner class="mx-auto"></mat-spinner>
+      <h2 class="mt-4">Cargando datos</h2>
+    </ng-container>
+    <h2 *ngIf="!isLoading">No hay registros disponibles</h2>
   </div>
 </ng-template>

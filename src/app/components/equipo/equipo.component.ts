@@ -1,81 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
 import { Jugador } from '../../interfaces/jugador.interface';
 import { Equipo } from '../../interfaces/equipo.interface';
+import { JugadoresService } from '../../services/jugadores.service';
 
 @Component({
   selector: 'app-equipo',
   templateUrl: './equipo.component.html',
   styleUrl: './equipo.component.css',
 })
-export class EquipoComponent {
+export class EquipoComponent implements OnInit {
   nombre: string = 'Felinos';
 
-  jugadores: Jugador[] = [
-    {
-      nombre: 'Sergio',
-      edad: 35,
-      apodo: 'Felino',
-      foto: 'imagen.jpg',
-      posicion: 'delantero',
-      estado: true,
-    },
-    {
-      nombre: 'Manuel',
-      edad: 25,
-      apodo: 'Lolo',
-      foto: 'imagen.jpg',
-      posicion: 'delantero',
-      estado: false,
-    },
-    {
-      nombre: 'Hugo',
-      edad: 25,
-      apodo: 'Sheriff',
-      foto: 'imagen.jpg',
-      posicion: 'delantero',
-      estado: true,
-    },
-    {
-      nombre: 'Paco',
-      edad: 22,
-      apodo: 'dragon',
-      foto: 'imagen.jpg',
-      posicion: 'medio',
-      estado: false,
-    },
-    {
-      nombre: 'Luis',
-      edad: 22,
-      apodo: 'duck',
-      foto: 'imagen.jpg',
-      posicion: 'defensa',
-      estado: false,
-    },
-    {
-      nombre: 'Ernesto',
-      edad: 28,
-      apodo: 'stone',
-      foto: 'imagen.jpg',
-      posicion: 'defensa',
-      estado: true,
-    },
-    {
-      nombre: 'Juan',
-      edad: 20,
-      apodo: 'gacela',
-      foto: 'imagen.jpg',
-      posicion: 'lateral',
-      estado: true,
-    },
-    {
-      nombre: 'Jose',
-      edad: 40,
-      apodo: 'compa',
-      foto: 'imagen.jpg',
-      posicion: 'lateral',
-      estado: false,
-    },
-  ];
+  jugadores: Jugador[] = [];
   equipos: Equipo[] = [];
 
   presupuesto = 18000000;
@@ -84,6 +21,18 @@ export class EquipoComponent {
   efectividad = 0.8732;
 
   busqueda: string = '';
+
+  isLoading: boolean = false;
+
+  constructor(private jugadorService: JugadoresService) {}
+
+  ngOnInit(): void {
+    this.isLoading = true;
+    this.jugadorService.obtenerJugadores().subscribe((resp) => {
+      this.jugadores = resp;
+      this.isLoading = false;
+    });
+  }
 
   updateState(event: boolean, jugador: Jugador) {
     jugador.estado = event;
