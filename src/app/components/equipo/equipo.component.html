@@ -1,25 +1,98 @@
-<p>Equipo {{ nombre }}</p>
+<p>
+  Equipo {{ nombre | uppercase }}
+  <br />
+  <code>Aficionados: {{ aficionados | number : "3.1-2" }}</code>
+  <br />
+  <code>Porcentaje de efectivad: {{ efectividad | percent : "1.1-5" }}</code>
+</p>
 <mat-divider class="my-3"></mat-divider>
 
-<mat-accordion class="" hideToggle>
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        {{ jugador }}
-      </mat-panel-title>
-      <mat-panel-description class="justify-content-between">
-        Delantero
-        <mat-icon>account_circle</mat-icon>
-      </mat-panel-description>
-    </mat-expansion-panel-header>
-    <p>Estado: {{ jugador.estado ? "Activo" : "No activo" }}</p>
-  </mat-expansion-panel>
-</mat-accordion>
+<p>Presupuesto: {{ presupuesto | currency }}</p>
 
-<mat-divider class="my-3"></mat-divider>
-<div class="col-3">
-  <app-jugador
-    [jugador]="'Daniel'"
-    (onActivate)="updateState($event)"
-  ></app-jugador>
+<mat-divider class="my-3" *ngIf="jugadores.length > 0"></mat-divider>
+
+<div class="grid">
+  <div class="col-2">
+    <code>Última actualización {{ actualizacion | date : "dd-MM-yyyy" }}</code>
+    <br />
+    <code>Última hora {{ actualizacion | date : "HH:mm a" }}</code>
+  </div>
+  <div class="col-10">
+    <mat-form-field class="search-input w-full">
+      <mat-icon matPrefix>search</mat-icon>
+      <input
+        matInput
+        type="search"
+        placeholder="Buscar jugador..."
+        [(ngModel)]="busqueda"
+      />
+    </mat-form-field>
+  </div>
 </div>
+
+<h2>Jugadores {{ busqueda }}</h2>
+
+<div class="grid" *ngIf="jugadores.length > 0; else noData">
+  <div class="col-2">
+    <mat-accordion>
+      <ng-template
+        ngFor
+        let-jugador
+        [ngForOf]="jugadores | buscador : busqueda"
+        let-i="index"
+      >
+        <mat-expansion-panel [expanded]="i == 0">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{ jugador.nombre }}
+            </mat-panel-title>
+            <mat-panel-description class="justify-content-between">
+              {{ jugador.posicion | titlecase }}
+              <mat-icon>account_circle</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <p><b>Edad:</b> {{ jugador.edad }}</p>
+          <p><b>Apodo:</b> {{ jugador.apodo }}</p>
+          <p>
+            <b>Estado:</b>
+            <span [ngStyle]="{ color: getColor(jugador.estado) }">
+              {{ jugador.estado ? "Activo" : "No activo" }}
+            </span>
+          </p>
+          <button
+            *ngIf="!jugador.estado"
+            mat-raised-button
+            color="primary"
+            (click)="activatePlayer(jugador)"
+          >
+            Activar
+          </button>
+        </mat-expansion-panel>
+      </ng-template>
+    </mat-accordion>
+  </div>
+
+  <div class="col-10">
+    <div class="grid">
+      <div
+        class="col-2"
+        *ngFor="let jugador of jugadores | buscador : busqueda"
+      >
+        <app-jugador
+          [ngClass]="{
+            inactivePlayer: !jugador.estado,
+            activatePlayer: jugador.estado
+          }"
+          [jugador]="jugador"
+          (onActivate)="updateState($event, jugador)"
+        ></app-jugador>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #noData>
+  <div class="mat-elevation-z8 p-3 pt-4 text-center text-primary">
+    <h2>No hay registros disponibles</h2>
+  </div>
+</ng-template>

@@ -1,8 +1,8 @@
 <mat-card class="card">
   <mat-card-header>
     <div mat-card-avatar class="header-image"></div>
-    <mat-card-title>{{ jugador }}</mat-card-title>
-    <mat-card-subtitle>{{ equipo }}</mat-card-subtitle>
+    <mat-card-title>{{ jugador.nombre }}</mat-card-title>
+    <mat-card-subtitle>{{ equipo ?? "Sin equipo" }}</mat-card-subtitle>
   </mat-card-header>
   <img
     mat-card-image
@@ -11,6 +11,13 @@
   />
 
   <mat-card-actions [align]="'end'">
-    <button mat-button color="primary" (click)="activatePlayer()">Activar</button>
+    <button
+      mat-button
+      color="primary"
+      (click)="deactivatePlayer()"
+      [disabled]="!jugador.estado"
+    >
+      Desactivar
+    </button>
   </mat-card-actions>
 </mat-card>

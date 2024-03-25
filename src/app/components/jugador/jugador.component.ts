@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Jugador } from '../../interfaces/jugador.interface';
+import { Equipo } from '../../interfaces/equipo.interface';
 
 @Component({
   selector: 'app-jugador',
@@ -7,17 +8,16 @@ import { Jugador } from '../../interfaces/jugador.interface';
   styleUrl: './jugador.component.css',
 })
 export class JugadorComponent {
-  // jugador!: Jugador;
   @Input()
-  jugador: string = 'Sergio';
+  jugador!: Jugador;
 
   @Input()
-  equipo: string = 'Sin equipo';
+  equipo?: Equipo;
 
   @Output('onActivate')
   estado: EventEmitter<boolean> = new EventEmitter();
 
-  activatePlayer() {
-    this.estado.emit(true)
+  deactivatePlayer() {
+    this.estado.emit(false)
   }
 }

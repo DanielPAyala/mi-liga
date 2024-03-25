@@ -9,6 +9,8 @@ import { EquipoComponent } from './components/equipo/equipo.component';
 import { JuegoComponent } from './components/juego/juego.component';
 import { JugadorComponent } from './components/jugador/jugador.component';
 import { LoginComponent } from './components/login/login.component';
+import { BuscadorPipe } from './pipes/buscador.pipe';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -16,11 +18,13 @@ import { LoginComponent } from './components/login/login.component';
     EquipoComponent,
     JuegoComponent,
     JugadorComponent,
-    LoginComponent
+    LoginComponent,
+    BuscadorPipe
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FormsModule,
     MaterialModule
   ],
   providers: [
